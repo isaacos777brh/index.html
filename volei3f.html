@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+<title>Placar de Vôlei 3° F</title>
+<style>
+
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #06215c, #000000);
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+    padding: 12px 15px 20px;
+    user-select: none;
+  }
+  h1 {
+    margin: 15px 0 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    font-size: 1.8rem;
+    text-align: center;
+    text-shadow: 1px 1px 3px rgba(255, 0, 0, 0.3);
+  }
+
+  form.team-names {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    max-width: 600px;
+    width: 100%;
+    margin-bottom: 18px;
+  }
+  form.team-names input {
+    flex: 1 1 45%;
+    padding: 10px 14px;
+    font-size: 1.3rem;
+    border-radius: 12px;
+    border: none;
+    outline: none;
+    font-weight: 700;
+    color: #000000;
+    background-color: #ececec;
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.8);
+    transition: background-color 0.3s ease;
+  }
+  form.team-names input::placeholder {
+    color: #000000;
+  }
+  form.team-names input:focus {
+    background-color: #ffffff;
+  }
+
+  .scoreboard {
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 18px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+    max-width: 600px;
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    padding: 22px 20px;
+    gap: 18px;
+    flex-wrap: wrap;
+  }
+
+  .team {
+    background: rgba(255, 255, 255, 0.15);
+    flex: 1 1 45%;
+    border-radius: 16px;
+    padding: 22px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: inset 0 0 12px rgba(228, 0, 0, 0.15);
+    transition: background 0.3s ease;
+  }
+  .team:hover {
+    background: rgba(255, 255, 255, 0.3);
+  }
+
+  .team-name {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 22px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    text-shadow: 1.2px 1.2px 2px rgba(0,0,0,0.35);
+  }
+
+  .score {
+    font-size: 5.2rem;
+    font-weight: 900;
+    margin-bottom: 22px;
+    color: #fffa;
+    text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.5);
+  }
+
+  .sets {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 18px;
+    color: #fff8;
+    user-select: none;
+  }
+  .sets strong {
+    color: #ffffff;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.45);
+  }
+
+  .buttons {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+    justify-content: center;
+  }
+
+  button {
+    font-size: 1.4rem;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    background: #144b9c;
+    color: #fff;
+    font-weight: 700;
+    box-shadow: 0 5px 14px rgba(0, 0, 0, 0.3);
+    transition: background-color 0.3s ease, transform 0.15s ease;
+    user-select: none;
+    flex: 1 1 auto;
+  }
+  button:hover,
+  button:focus {
+    background: #000000;
+    outline: none;
+    transform: translateY(-2px);
+  }
+  button:active {
+    transform: translateY(1px);
+  }
+
+  button.decrement {
+    background: #82afe9;
+  }
+  button.decrement:hover,
+  button.decrement:focus {
+    background: #000000;
+  }
+
+  button.sets-increment {
+    background: #9c88ff;
+  }
+  button.sets-increment:hover,
+  button.sets-increment:focus {
+    background: #100c3a;
+  }
+
+  .timer-section {
+    width: 100%;
+    max-width: 600px;
+    margin: 25px 0 10px;
+    background: rgba(255,255,255,0.12);
+    border-radius: 16px;
+    padding: 18px 25px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    user-select: none;
+  }
+
+  .timer-display {
+    font-size: 3.8rem;
+    font-weight: 900;
+    color: #fff;
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.5);
+    margin-bottom: 20px;
+    letter-spacing: 4px;
+    font-family: 'Courier New', Courier, monospace;
+  }
+
+  .timer-buttons {
+    display: flex;
+    gap: 18px;
+    width: 100%;
+    max-width: 320px;
+    justify-content: center;
+  }
+
+  .timer-buttons button {
+    flex: 1 1 auto;
+    font-size: 1.3rem;
+    padding: 12px 14px;
+    border-radius: 14px;
+  }
+
+  .reset-button {
+    margin-top: 28px;
+    background: #fbc531;
+    color: #222;
+    width: 100%;
+    font-size: 1.7rem;
+    font-weight: 800;
+    padding: 16px 0;
+    border-radius: 24px;
+    box-shadow: 0 5px 18px rgba(251, 197, 49, 0.9);
+  }
+  .reset-button:hover,
+  .reset-button:focus {
+    background: #c19c28;
+    outline: none;
+    transform: translateY(-2px);
+  }
+  .reset-button:active {
+    transform: translateY(1px);
+  }
+
+  /* Responsive adjustments */
+  @media (max-width: 600px) {
+    body {
+      padding: 12px 12px 15px;
+    }
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 12px;
+    }
+    form.team-names {
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    form.team-names input {
+      width: 100%;
+      font-size: 1.4rem;
+      padding: 12px 16px;
+    }
+    .scoreboard {
+      flex-wrap: wrap;
+      gap: 18px;
+      padding: 15px 12px;
+    }
+    .team {
+      flex: 1 1 100%;
+      padding: 18px 16px;
+      margin-bottom: 12px;
+    }
+    .team-name {
+      font-size: 1.3rem;
+      margin-bottom: 16px;
+    }
+    .score {
+      font-size: 4.4rem;
+      margin-bottom: 18px;
+    }
+    .sets {
+      font-size: 1.3rem;
+      margin-bottom: 14px;
+    }
+
+    .buttons {
+      gap: 10px;
+    }
+    button {
+      font-size: 1.25rem;
+      padding: 11px 12px;
+    }
+
+    .timer-section {
+      padding: 14px 16px;
+      margin: 18px 0 10px;
+    }
+    .timer-display {
+      font-size: 3rem;
+      margin-bottom: 18px;
+    }
+    .timer-buttons {
+      max-width: 100%;
+      gap: 12px;
+    }
+    .timer-buttons button {
+      font-size: 1.15rem;
+      padding: 10px;
+    }
+
+    .reset-button {
+      font-size: 1.5rem;
+      padding: 14px 0;
+      margin-top: 22px;
+    }
+  }
+  @media (max-width: 350px) {
+    .score {
+      font-size: 3.6rem;
+    }
+    button {
+      font-size: 1.1rem;
+      padding: 8px 6px;
+    }
+  }
+</style>
+</head>
+<body>
+  <h1>Placar de Vôlei do 3°F</h1>
+
+  <form class="team-names" aria-label="Formulário para inserir nomes dos times" onsubmit="return false;">
+    <input type="text" id="inputTeamA" name="teamA" placeholder="Nome do Time A" aria-label="Nome do Time A" maxlength="20" autocomplete="off" />
+    <input type="text" id="inputTeamB" name="teamB" placeholder="Nome do Time B" aria-label="Nome do Time B" maxlength="20" autocomplete="off" />
+  </form>
+
+  <div class="scoreboard" role="main" aria-label="Placar de jogo de vôlei">
+    <section class="team" aria-label="Time A">
+      <div class="team-name" id="teamA-name" tabindex="0">Time A</div>
+      <div class="score" id="scoreA" aria-live="polite" aria-atomic="true" tabindex="0">0</div>
+      <div class="sets" id="setsA" tabindex="0" aria-label="Sets ganhos pelo Time A">Sets: <strong>0</strong></div>
+      <div class="buttons">
+        <button type="button" id="decrementA" class="decrement" aria-label="Diminuir pontos do Time A">-1</button>
+        <button type="button" id="incrementA" aria-label="Adicionar ponto para o Time A">+1</button>
+        <button type="button" id="incrementSetA" class="sets-increment" aria-label="Adicionar set ganho para o Time A">Adicionar Set</button>
+      </div>
+    </section>
+    <section class="team" aria-label="Time B">
+      <div class="team-name" id="teamB-name" tabindex="0">Time B</div>
+      <div class="score" id="scoreB" aria-live="polite" aria-atomic="true" tabindex="0">0</div>
+      <div class="sets" id="setsB" tabindex="0" aria-label="Sets ganhos pelo Time B">Sets: <strong>0</strong></div>
+      <div class="buttons">
+        <button type="button" id="decrementB" class="decrement" aria-label="Diminuir pontos do Time B">-1</button>
+        <button type="button" id="incrementB" aria-label="Adicionar ponto para o Time B">+1</button>
+        <button type="button" id="incrementSetB" class="sets-increment" aria-label="Adicionar set ganho para o Time B">Adicionar Set</button>
+      </div>
+    </section>
+  </div>
+
+  <div class="timer-section" aria-label="Cronômetro da partida de vôlei" role="timer">
+    <div class="timer-display" id="timerDisplay" aria-live="polite" aria-atomic="true" tabindex="0">00:00</div>
+    <div class="timer-buttons">
+      <button type="button" id="startTimer" aria-label="Iniciar cronômetro">Iniciar</button>
+      <button type="button" id="pauseTimer" aria-label="Pausar cronômetro" disabled>Pausar</button>
+      <button type="button" id="resetTimer" aria-label="Reiniciar cronômetro">Reiniciar</button>
+    </div>
+  </div>
+
+  <button type="button" class="reset-button" id="resetAll" aria-label="Reiniciar placar completo e cronômetro">Reiniciar Tudo</button>
+
+<script>
+  (() => {
+    // Elements for scores
+    const scoreAEl = document.getElementById('scoreA');
+    const scoreBEl = document.getElementById('scoreB');
+    // Elements for sets
+    const setsAEl = document.querySelector('#setsA strong');
+    const setsBEl = document.querySelector('#setsB strong');
+    // Elements for team names input and display
+    const inputTeamA = document.getElementById('inputTeamA');
+    const inputTeamB = document.getElementById('inputTeamB');
+    const teamANameEl = document.getElementById('teamA-name');
+    const teamBNameEl = document.getElementById('teamB-name');
+
+    // Score and sets initialization
+    let scoreA = 0;
+    let scoreB = 0;
+    let setsA = 0;
+    let setsB = 0;
+
+    // Render function for scores and sets
+    const renderScoresAndSets = () => {
+      scoreAEl.textContent = scoreA;
+      scoreBEl.textContent = scoreB;
+      setsAEl.textContent = setsA;
+      setsBEl.textContent = setsB;
+    };
+
+    // Functions to increment/decrement scores
+    const incrementA = () => {
+      scoreA++;
+      renderScoresAndSets();
+    };
+    const decrementA = () => {
+      if (scoreA > 0) {
+        scoreA--;
+        renderScoresAndSets();
+      }
+    };
+    const incrementB = () => {
+      scoreB++;
+      renderScoresAndSets();
+    };
+    const decrementB = () => {
+      if (scoreB > 0) {
+        scoreB--;
+        renderScoresAndSets();
+      }
+    };
+
+    // Increment sets counters
+    const incrementSetA = () => {
+      setsA++;
+      renderScoresAndSets();
+    };
+    const incrementSetB = () => {
+      setsB++;
+      renderScoresAndSets();
+    };
+
+    // Team name input update
+    const updateTeamAName = () => {
+      let val = inputTeamA.value.trim();
+      teamANameEl.textContent = val === '' ? 'Time A' : val;
+    };
+    const updateTeamBName = () => {
+      let val = inputTeamB.value.trim();
+      teamBNameEl.textContent = val === '' ? 'Time B' : val;
+    };
+
+    inputTeamA.addEventListener('input', updateTeamAName);
+    inputTeamB.addEventListener('input', updateTeamBName);
+
+    // Timer variables and functions
+    const timerDisplay = document.getElementById('timerDisplay');
+    const startBtn = document.getElementById('startTimer');
+    const pauseBtn = document.getElementById('pauseTimer');
+    const resetBtn = document.getElementById('resetTimer');
+
+    let timerInterval = null;
+    let elapsedSeconds = 0;
+    let timerRunning = false;
+
+    // Formatting seconds to mm:ss
+    const formatTime = (secs) => {
+      const m = String(Math.floor(secs / 60)).padStart(2, '0');
+      const s = String(secs % 60).padStart(2, '0');
+      return `${m}:${s}`;
+    };
+
+    // Update timer display
+    const updateTimerDisplay = () => {
+      timerDisplay.textContent = formatTime(elapsedSeconds);
+    };
+
+    // Start timer
+    const startTimer = () => {
+      if (timerRunning) return;
+      timerRunning = true;
+      startBtn.disabled = true;
+      pauseBtn.disabled = false;
+      resetBtn.disabled = false;
+      timerInterval = setInterval(() => {
+        elapsedSeconds++;
+        updateTimerDisplay();
+      }, 1000);
+    };
+
+    // Pause timer
+    const pauseTimer = () => {
+      if (!timerRunning) return;
+      timerRunning = false;
+      startBtn.disabled = false;
+      pauseBtn.disabled = true;
+      clearInterval(timerInterval);
+    };
+
+    // Reset timer
+    const resetTimer = () => {
+      timerRunning = false;
+      elapsedSeconds = 0;
+      updateTimerDisplay();
+      clearInterval(timerInterval);
+      startBtn.disabled = false;
+      pauseBtn.disabled = true;
+      resetBtn.disabled = true;
+    };
+
+    // Reset everything: scores, sets, timer, team names input
+    const resetAll = () => {
+      scoreA = 0;
+      scoreB = 0;
+      setsA = 0;
+      setsB = 0;
+      inputTeamA.value = '';
+      inputTeamB.value = '';
+      updateTeamAName();
+      updateTeamBName();
+      renderScoresAndSets();
+      resetTimer();
+    };
+
+    // Event listeners binding
+    document.getElementById('incrementA').addEventListener('click', incrementA);
+    document.getElementById('decrementA').addEventListener('click', decrementA);
+    document.getElementById('incrementB').addEventListener('click', incrementB);
+    document.getElementById('decrementB').addEventListener('click', decrementB);
+
+    document.getElementById('incrementSetA').addEventListener('click', incrementSetA);
+    document.getElementById('incrementSetB').addEventListener('click', incrementSetB);
+
+    startBtn.addEventListener('click', startTimer);
+    pauseBtn.addEventListener('click', pauseTimer);
+    resetBtn.addEventListener('click', resetTimer);
+
+    document.getElementById('resetAll').addEventListener('click', resetAll);
+
+    // Initial render
+    updateTeamAName();
+    updateTeamBName();
+    renderScoresAndSets();
+    resetTimer();
+  })();
+</script>
+</body>
+</html>
+
